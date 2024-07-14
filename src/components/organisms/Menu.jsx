@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../molecules/Navbar';
 import ContentSection from './ContentSection';
+import Footer from '../molecules/Footer'
 import Image from '../atoms/Image';
 import Text from '../atoms/Text';
 
@@ -8,19 +9,20 @@ const Menu = () => {
   return (
     <div className="bg-gray-100">
       <Navbar />
-      <ContentSection id="descripcion" title="Descripción" topImage="public/Imagenes/Romeo.jpeg">
-        <Text className="text-3xl font-bold mb-2">Café Orgánico</Text>
+      <ContentSection id="topImage" topImage="public/Imagenes/Romeo.jpeg">
+      <ContentSection id="descripcion" title="Descripción">
+      <Text className="text-3xl mb-8" > Microempresa creada aproximadamente hace 7 años, en el municipio
+de Motozintla, Chiapas; nacida de la necesidad de apoyar a productores de la dependencia Sagarpa conocido como FAPPA (fondo para el apoyo
+  a proyectos productivos en núcleos agrarios), elaborando nuestro café con productos artesanales y naturales que tiene un manejo agroecológico que promueve la protección del medio ambiente y ofrece un
+mercado sano sin uso de agroquímicos. </Text>
+        <Text className="text-3xl mb-4">Derivado de la busqueda por ampliar la comercialización del producto, se trasladó a la ciudad de Tuxtla Gutiérrez, Chiapas (por ser un mercado más grande).</Text>
+        <Text className="text-3xl font-bold mb-3">Café Orgánico</Text>
         <Text className="text-2xl text-green-700 mb-4">100%</Text>
         <Text className="mb-4">
-        Productores de Motozintla de Mendoza chiapas , PRODUCTORES DE LA MICI OCOSINGO
-        CHIAPAS .
+        Productores de Motozintla de Mendoza Chiapas, PRODUCTORES DE LA MICI OCOSINGO,
+        CHIAPAS.
         </Text>
-        <div className="flex justify-center space-x-4">
-  <Image src="public/Imagenes/Cafe02.jpeg" alt="Image 1" className="w-1/2 h-48 rounded-lg shadow-lg" />
-  <Image src="public/Imagenes/Cafe04.jpeg" alt="Image 2" className="w-1/2 h-48 rounded-lg shadow-lg" />
-  <Image src="public/Imagenes/Cafe03.jpeg" alt="Image 3" className="w-1/2 h-48 rounded-lg shadow-lg" />
-</div>
-
+      </ContentSection>
       </ContentSection>
       <ContentSection id="productos" title="Productos">
   <div className="grid grid-cols-3 gap-4">
@@ -49,6 +51,9 @@ const Menu = () => {
           <li className="mb-2">chocolate en polvo</li>
         </ul>
       </ContentSection>
+
+      <Footer></Footer>
+ 
     </div>
   );
 };
