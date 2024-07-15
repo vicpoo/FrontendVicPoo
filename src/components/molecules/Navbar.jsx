@@ -8,7 +8,7 @@ const Navbar = () => {
       html: `
       <p>Teléfono:9613147534</p>
       <p>romeo5919@hotmail.com</p>
-    `,
+       `,
       imageUrl: "public/Imagenes/Logo.jpeg",
       imageWidth: 400,
       imageHeight: 300,

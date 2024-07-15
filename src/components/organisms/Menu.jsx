@@ -10,7 +10,7 @@ const Menu = () => {
     <div className="bg-gray-100">
       <Navbar />
       <ContentSection id="topImage" topImage="public/Imagenes/Romeo.jpeg">
-      <ContentSection id="descripcion" title="Descripción">
+      <ContentSection id="descripcion" title="Sobre nosotros...">
       <Text className="text-3xl mb-8" > Microempresa creada aproximadamente hace 7 años, en el municipio
 de Motozintla, Chiapas; nacida de la necesidad de apoyar a productores de la dependencia Sagarpa conocido como FAPPA (fondo para el apoyo
   a proyectos productivos en núcleos agrarios), elaborando nuestro café con productos artesanales y naturales que tiene un manejo agroecológico que promueve la protección del medio ambiente y ofrece un
