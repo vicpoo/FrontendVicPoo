@@ -23,6 +23,7 @@ const Navbar = () => {
         <a href="#productos" className="text-2xl text-white hover:text-gray-700">Productos</a>
         <a href="#precios" className="text-2xl text-white hover:text-gray-700">Precios</a>
         <a href="#footer" onClick={handleContactClick} className="text-2xl text-white hover:text-gray-700">Contactanos</a>
+        
       </div>
       <div className="flex items-center space-x-2">
         <i className="fa fa-shopping-cart text-2xl text-white hover:text-gray-700"></i>
