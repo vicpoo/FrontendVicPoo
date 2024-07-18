@@ -1,6 +1,8 @@
 import React from 'react';
 import Input from '../atoms/Input';
-import Button from '../atoms/Button';
+import Button from '../atoms/ButtonAdmi.jsx';
+
+
 const LoginForm = ({ onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
