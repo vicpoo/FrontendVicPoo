@@ -3,6 +3,7 @@ import CoffeeForm from '../components/organisms/CoffeeForm';
 import MenuContainer from '../components/molecules/MenuContainer';
 
 function FormularioInventary () {
+  const [showSection, setShowSection] = useState(false)
     const menuItems = ['Agregar', 'Editar', 'Borrar'];
     const handleMenuClick = (item) => {
         setShowSection(false);
