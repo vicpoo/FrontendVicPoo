@@ -1,9 +1,11 @@
 import React from 'react';
 
-const Footer = () => (
-  <footer className="bg-[#CFB494] text-center p-4">
-    <p>&copy; {new Date().getFullYear()} Las 3 negritas. Todos los derechos reservados.</p>
-  </footer>
-);
+const Footer = () => {
+  return (
+    <footer className="bg-gray-800 text-white p-4 text-center">
+      <p>©2024 Las 3 negritas. Todos los derechos reservados.</p>
+    </footer>
+  );
+};
 
 export default Footer;
