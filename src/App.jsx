@@ -14,13 +14,8 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/Login' element={<Login />} />
           <Route path='/Administrador' element={<Administrador />} />
-          <Route path='/Seller' element={<Seller/>} />
-          <Route path='/FormularioIntary' element={<FormularioInventary/>} />
-          
-
-         
-          
-
+          <Route path='/Seller' element={<Seller />} />
+          <Route path='/Formulario' element={<FormularioInventary />} />
         </Routes>
       </main>
     </Router>
