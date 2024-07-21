@@ -1,9 +1,9 @@
 
 import React from 'react';
 
-const Button= ({ text }) => {
+const ButtonAdmi= ({ text }) => {
   return <div className="bg-[#CFB494] p-8 rounded shadow-lg">{text}</div>;
 };
 
-export default Button;
+export default ButtonAdmi;
 
