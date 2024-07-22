@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/molecules/Navbar';
 import ProductList from '../components/organisms/ProductList';
+import NavbarExit from '../components/molecules/NavbarExit';
 
 const CatalogPage = () => {
   const [products, setProducts] = useState([]);
@@ -28,7 +28,7 @@ const CatalogPage = () => {
 
   return (
     <div className="bg-pastelPink min-h-screen">
-      <Navbar />
+      <NavbarExit />
       <div className="container mx-auto p-4">
         <ProductList products={products} onProductClick={handleProductClick} />
       </div>
