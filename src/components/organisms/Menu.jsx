@@ -31,7 +31,6 @@ const Menu = () => {
             <Text className="text-lg text-gray-800">
               Microempresa creada hace 7 años, en el municipio de Motozintla, Chiapas; nacida de la necesidad de apoyar a productores de café de la dependencia Sagarpa conocido como FAPPA (fondo para el apoyo a proyectos productivos en núcleos agrarios); para elaborar café con productos artesanales y naturales que tiene un manejo agroecológico que promueve la protección del medio ambiente y ofrece un mercado sano sin uso de agroquímicos, LO QUE NOS CONVIERTE EN UN PRODUCTO COMPLETAMENTE ORGÁNICO.
             </Text>
-            <button className="mt-4 px-6 py-2 bg-pink-500 text-white rounded">Contáctanos</button>
           </div>
           <img src="public/Imagenes/sobreNosotros.jpg" alt="Sobre Nosotros" className="w-50 h-60 rounded-full object-cover shadow-lg" />
         </div>
