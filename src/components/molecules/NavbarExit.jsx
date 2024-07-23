@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Image from '../atoms/Image';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram} from 'react-icons/fa';
 
@@ -13,9 +12,9 @@ const NavbarExit = () => {
   return (
     <nav className="flex justify-between items-center p-6 sticky top-0 z-50 bg-opacity-0 bg-white">
       <div className="flex items-center space-x-4">
-        <Image src="public/Imagenes/Logo.jpeg" alt="Logo" className="w-16 h-16" />
+      <img src="/public/Imagenes/Logo final-Photoroom.png" alt="Logo" className="w-20 h-20 object-cover" />
         <Link to="/" className="text-xl text-white hover:text-gray-700 hidden md:inline">INICIO</Link>
-        <Link to="/Catalogo" className="text-xl text-white hover:text-gray-700 hidden md:inline">Tienda</Link>
+        <Link to="/Catalogo" className="text-xl text-white hover:text-gray-700 hidden md:inline">TIENDA</Link>
         <button onClick={toggleSocialLinks} className="text-xl text-white hover:text-gray-700 hidden md:inline">
           REDES SOCIALES
         </button>
