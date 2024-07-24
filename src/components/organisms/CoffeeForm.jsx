@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Input from '../atoms/Input';
-import ButtonAdmi from '../atoms/ButtonAdmi';
+import Button from '../atoms/Button';
 
 
 
@@ -59,7 +59,7 @@ const CoffeeForm = () => {
                     onChange={(e) => setRating(e.target.value)}
                 />
             </div>
-            <ButtonAdmi
+            <Button
                 onClick={handleSubmit} 
                 text="Agregar" 
                 className="w-full"

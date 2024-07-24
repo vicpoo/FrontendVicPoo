@@ -1,4 +1,3 @@
-// components/atoms/TextInput.jsx
 import React from 'react';
 
 const TextInput = ({ label, value, onChange }) => (

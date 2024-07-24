@@ -1,10 +1,24 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/organisms/LoginForm';
 import NavbarExit from '../components/molecules/NavbarExit'; 
 
 function Login() {
-    const handleLogin = () => {
-        alert('Inicio de sesión enviado');
+    const navigate = useNavigate();
+
+    const handleLogin = (data) => {
+        const { rol_id_fk } = data.user;
+
+        // Redirigir basado en el rol del usuario
+        if (rol_id_fk === 1) {
+            navigate('/Administrador');
+        } else if (rol_id_fk === 2) {
+            navigate('/Seller');
+        } else if (rol_id_fk === 3) {
+            navigate('/Inventario');
+        } else {
+            alert('Rol desconocido');
+        }
     };
 
     return (

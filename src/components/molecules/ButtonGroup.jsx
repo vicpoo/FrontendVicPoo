@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Button from '../atoms/ButtonAdmi';
+import Button from '../atoms/Button';
 
 const ButtonGroup = ({ buttons }) => {
   return (

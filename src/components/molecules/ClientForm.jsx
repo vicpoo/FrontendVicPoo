@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TextInput from '../atoms/TextInput';
-import ButtonAdmin from '../atoms/ButtonAdmin';
+import Button from '../atoms/Button';
 
 const ClientForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
@@ -10,7 +10,6 @@ const ClientForm = ({ onSubmit }) => {
 
   const handleSubmit = () => {
     onSubmit({ name, lastName, address, phone });
-    // Clear form after submission
     setName('');
     setLastName('');
     setAddress('');
@@ -23,7 +22,7 @@ const ClientForm = ({ onSubmit }) => {
       <TextInput label="Apellido del cliente" value={lastName} onChange={(e) => setLastName(e.target.value)} />
       <TextInput label="Dirección" value={address} onChange={(e) => setAddress(e.target.value)} />
       <TextInput label="Número telefónico" value={phone} onChange={(e) => setPhone(e.target.value)} />
-      <ButtonAdmin text="Agregar" onClick={handleSubmit} />
+      <Button text="Agregar" onClick={handleSubmit} />
     </div>
   );
 };
