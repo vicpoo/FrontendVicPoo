@@ -9,7 +9,6 @@ function Login() {
     const handleLogin = (data) => {
         const { rol_id_fk } = data.user;
 
-        // Redirigir basado en el rol del usuario
         if (rol_id_fk === 1) {
             navigate('/Administrador');
         } else if (rol_id_fk === 2) {
@@ -31,7 +30,6 @@ function Login() {
                         <LoginForm onSubmit={handleLogin} />
                     </div>
                     <div className="w-full md:w-1/2 mt-6 md:mt-0 md:ml-6">
-                        {/* Aquí puedes añadir tu imagen */}
                         <img src="/public/Imagenes/collage login.jpg" alt="Imagen de inicio de sesión" className="w-48 h-auto object-cover" />
                     </div>
                 </div>
