@@ -12,7 +12,7 @@ function Login() {
         if (rol_id_fk === 1) {
             navigate('/Administrador');
         } else if (rol_id_fk === 2) {
-            navigate('/Seller');
+            navigate('/vendedor');
         } else if (rol_id_fk === 3) {
             navigate('/Inventario');
         } else {

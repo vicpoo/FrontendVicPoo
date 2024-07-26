@@ -26,9 +26,9 @@ const ClientForm = ({ onSubmit, initialValues }) => {
       email,
       phone,
       address,
-      created_by: 'admin',
-      updated_by: 'admin',
-      deleted: '0',
+      created_by: 'admin',  // Puede ser ajustado según el contexto
+      updated_by: 'admin',  // Puede ser ajustado según el contexto
+      deleted: '0'  // Valor predeterminado
     };
     onSubmit(newClient);
     // Clear fields

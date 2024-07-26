@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import CoffeeForm from '../components/molecules/CoffeeForm';
 import InventoryTable from '../components/organisms/InventoryTable';
 import axios from 'axios';
@@ -8,8 +9,8 @@ const InventoryPage = () => {
   const [inventory, setInventory] = useState([]);
   const [currentAction, setCurrentAction] = useState('inventory');
   const [currentCoffee, setCurrentCoffee] = useState(null);
+  const navigate = useNavigate(); 
 
-  // Fetch inventory data
   const fetchInventory = async () => {
     try {
       const response = await axios.get('http://100.27.97.251/api/coffee');
@@ -19,32 +20,28 @@ const InventoryPage = () => {
     }
   };
 
-  // Handle deleting a coffee
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://100.27.97.251/api/coffee/${id}`);
-      alert('Café eliminado con éxito'); // Alerta de éxito
-      fetchInventory(); // Refresh inventory list
+      alert('Café eliminado con éxito'); 
+      fetchInventory(); 
     } catch (error) {
       console.error('Error deleting coffee:', error);
       alert('Error al eliminar el café');
     }
   };
 
-  // Handle editing a coffee
   const handleEdit = (coffee) => {
     setCurrentCoffee(coffee);
     setCurrentAction('edit');
   };
 
-  // Handle adding stock to a coffee
-  const handleAddStock = async (id) => {
-    const incrementQuantity = prompt('Ingrese la cantidad a incrementar:');
+  const handleAddStock = async (id, incrementQuantity) => {
     if (incrementQuantity && !isNaN(incrementQuantity)) {
       try {
         await axios.put(`http://100.27.97.251/api/coffee/${id}/stock`, { increment_quantity: parseInt(incrementQuantity, 10) });
-        alert('Stock actualizado con éxito'); // Alerta de éxito
-        fetchInventory(); // Refresh inventory list
+        alert('Stock actualizado con éxito'); 
+        fetchInventory(); 
       } catch (error) {
         console.error('Error adding stock:', error);
         alert('Error al actualizar el stock');
@@ -54,7 +51,10 @@ const InventoryPage = () => {
     }
   };
 
-  // Fetch inventory on component mount
+  const handleLogout = () => {
+    navigate('/login');
+  };
+
   useEffect(() => {
     fetchInventory();
   }, []);
@@ -78,7 +78,7 @@ const InventoryPage = () => {
             </button>
           </li>
           <li>
-            <button className="text-white text-sm flex items-center my-3">
+            <button onClick={handleLogout} className="text-white text-sm flex items-center my-3">
               <FaSignOutAlt className="text-white text-xl mr-2" /> <span>Salir</span>
             </button>
           </li>

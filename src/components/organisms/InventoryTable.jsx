@@ -14,12 +14,11 @@ const InventoryTable = ({ inventory, onDelete, onEdit, onAddStock }) => {
   const handleAddStock = async (coffee_id) => {
     const newStock = stockInputs[coffee_id] || 0;
     try {
-      await onAddStock(coffee_id, newStock); // Asegúrate de que onAddStock maneje la solicitud PUT
-      setStockInputs(prev => ({ ...prev, [coffee_id]: '' })); // Limpiar el campo después de la actualización
-      alert('Stock updated successfully');
+      await onAddStock(coffee_id, newStock);
+      setStockInputs(prev => ({ ...prev, [coffee_id]: '' })); 
     } catch (error) {
       console.error('Error adding stock:', error);
-      alert('Failed to update stock');
+      alert('Error al actualizar el stock');
     }
   };
 
