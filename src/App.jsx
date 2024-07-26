@@ -5,6 +5,7 @@ import Administrador from './pages/Administrador';
 import FormularioInventary from './pages/FormularioInventary';
 import Seller from './pages/Seller';
 import Catalogo from './pages/Catalogo';
+import InventoryPage from './pages/InventoryPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path='/Seller' element={<Seller />} />
           <Route path='/Formulario' element={<FormularioInventary/>} />
           <Route path='/Catalogo' element={<Catalogo />} />
+          <Route path="/inventario" element={<InventoryPage />} />
         </Routes>
       </main>
     </Router>
