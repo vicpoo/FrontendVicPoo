@@ -1,36 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import ProductList from '../components/organisms/ProductList';
 import NavbarExit from '../components/molecules/NavbarExit';
+import axios from 'axios';
 
 const CatalogPage = () => {
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
+  // Fetch products from API
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('http://100.27.97.251/api/coffee');
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  // Fetch products when component mounts
   useEffect(() => {
-    // Aquí puedes hacer una llamada a la API para obtener los productos
-    const fetchProducts = async () => {
-      // Simulación de llamada a API
-      const productsData = [
-        { id: 1, title: 'Product 1', price: '$10', description: 'Description 1', image: 'url1' },
-        { id: 2, title: 'Product 2', price: '$20', description: 'Description 2', image: 'url2' },
-        { id: 3, title: 'Product 3', price: '$30', description: 'Description 2', image: 'url3' },
-        // ... más productos
-      ];
-      setProducts(productsData);
-    };
-
     fetchProducts();
   }, []);
 
-  const handleProductClick = (id) => {
-    console.log(`Product with id ${id} clicked`);
-    // Aquí puedes manejar la lógica para mostrar los detalles del producto
+  // Handle product clicks (e.g., for viewing details)
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
+
+  // Close the product details view
+  const handleCloseDetails = () => {
+    setSelectedProduct(null);
   };
 
   return (
     <div className="bg-pastelPink min-h-screen">
       <NavbarExit />
       <div className="container mx-auto p-4">
-        <ProductList products={products} onProductClick={handleProductClick} />
+        <ProductList 
+          products={products.map(({ coffee_id, name, price, image }) => ({
+            id: coffee_id,
+            title: name,
+            price,
+            image
+          }))} 
+          onProductClick={handleProductClick} 
+        />
+
+        {selectedProduct && (
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded shadow-lg w-3/4 md:w-1/2">
+              <h2 className="text-2xl font-bold mb-2">{selectedProduct.name}</h2>
+              {selectedProduct.image && (
+                <img 
+                  src={selectedProduct.image} 
+                  alt={selectedProduct.name} 
+                  className="mb-4 rounded w-full h-auto"
+                />
+              )}
+              <p><strong>Price:</strong> {selectedProduct.price}</p>
+              <p><strong>Origin:</strong> {selectedProduct.origin || 'N/A'}</p>
+              <p><strong>Height:</strong> {selectedProduct.height || 'N/A'}</p>
+              <p><strong>Qualification:</strong> {selectedProduct.qualification || 'N/A'}</p>
+              <p><strong>Inventory Quantity:</strong> {selectedProduct.inventory_quantity || 'N/A'}</p>
+              <button 
+                onClick={handleCloseDetails}
+                className="mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
