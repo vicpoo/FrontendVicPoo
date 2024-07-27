@@ -88,15 +88,20 @@ const AdminPage = () => {
     setCurrentClient(client);
     setCurrentAction('edit-client');
   };
-
-  // Handle add/update inventory
+  // Handle add/update coffee
   const handleAddOrUpdateCoffee = async (coffeeData, isEditing) => {
     try {
+      const coffeePayload = {
+        ...coffeeData,
+        updated_at: new Date().toISOString(),
+        updated_by: 'system',
+      };
+
       if (isEditing && currentInventory) {
-        await axios.put(`http://100.27.97.251/api/coffee/${currentInventory.coffee_id}`, coffeeData);
+        await axios.put(`http://100.27.97.251/api/coffee/${currentInventory.coffee_id}`, coffeePayload);
         alert('Café actualizado con éxito');
       } else {
-        await axios.post('http://100.27.97.251/api/coffee', { ...coffeeData, created_at: new Date().toISOString(), created_by: 'system', deleted: 0 });
+        await axios.post('http://100.27.97.251/api/coffee', { ...coffeePayload, created_at: new Date().toISOString(), created_by: 'system', deleted: 0 });
         alert('Café agregado con éxito');
       }
       fetchInventory();
