@@ -32,10 +32,10 @@ const VendorPage = () => {
       const response = await axios.get('http://100.27.97.251/api/order');
       setOrders(response.data);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error('Error fetching orders:', error.message, error.response?.data);
       toast.error('Error al obtener las órdenes');
     }
-  };
+  }
 
   const handleAddOrUpdateClient = async (client) => {
     try {
@@ -50,7 +50,7 @@ const VendorPage = () => {
       setCurrentAction('clients');
       setCurrentClient(null);
     } catch (error) {
-      console.error('Error adding/updating client:', error);
+      console.error('Error adding/updating client:', error.message, error.response?.data);
       toast.error('Error al agregar/actualizar el cliente');
     }
   };
@@ -61,14 +61,14 @@ const VendorPage = () => {
         await axios.put(`http://100.27.97.251/api/order/${currentOrder.order_id}`, order);
         toast.success('Orden actualizada con éxito');
       } else {
-        await axios.post('http://100.27.97.251/api/order/with-coffees', order);
+        await axios.post('http://100.27.97.251/api/order', order);
         toast.success('Orden agregada con éxito');
       }
       fetchOrders();
       setCurrentAction('orders');
       setCurrentOrder(null);
     } catch (error) {
-      console.error('Error adding/updating order:', error);
+      console.error('Error adding/updating order:', error.message, error.response?.data);
       toast.error('Error al agregar/actualizar la orden');
     }
   };
@@ -91,7 +91,7 @@ const VendorPage = () => {
         toast.success('Cliente eliminado con éxito');
         fetchClients();
       } catch (error) {
-        console.error('Error deleting client:', error);
+        console.error('Error deleting client:', error.message, error.response?.data);
         toast.error('Error al eliminar el cliente');
       }
     }
@@ -115,7 +115,7 @@ const VendorPage = () => {
         toast.success('Orden eliminada con éxito');
         fetchOrders();
       } catch (error) {
-        console.error('Error deleting order:', error);
+        console.error('Error deleting order:', error.message, error.response?.data);
         toast.error('Error al eliminar la orden');
       }
     }

@@ -1,55 +1,98 @@
 import React, { useState, useEffect } from 'react';
-import TextInput from '../atoms/TextInput';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import Button from '../atoms/Button';
 
-const OrderForm = ({ onSubmit, initialValues }) => {
-  const [client_id, setClientId] = useState('');
-  const [products, setProducts] = useState([{ coffee_id: '', quantity: '' }]);
+const OrderForm = ({ orderId, onSave }) => {
+  const [orderData, setOrderData] = useState({
+    date_orders: '',
+    client_id_fk: '',
+    created_by: 'admin',
+    updated_by: 'admin',
+    deleted: false,
+  });
+
+  const [clients, setClients] = useState([]);
 
   useEffect(() => {
-    if (initialValues) {
-      setClientId(initialValues.client_id || '');
-      setProducts(initialValues.products || [{ coffee_id: '', quantity: '' }]);
-    }
-  }, [initialValues]);
-
-  const handleSubmit = () => {
-    const newOrder = {
-      client_id: parseInt(client_id),
-      products: products.map(product => ({
-        coffee_id: parseInt(product.coffee_id),
-        quantity: parseInt(product.quantity)
-      })),
-      created_by: 'admin',
-      updated_by: 'admin',
-      deleted: 0
+    const fetchClients = async () => {
+      try {
+        const response = await axios.get('http://100.27.97.251/api/client');
+        setClients(response.data);
+      } catch (error) {
+        toast.error('Error al obtener los clientes');
+      }
     };
-    onSubmit(newOrder);
-    setClientId('');
-    setProducts([{ coffee_id: '', quantity: '' }]);
+    fetchClients();
+
+    if (orderId) {
+      const fetchOrder = async () => {
+        try {
+          const response = await axios.get(`http://100.27.97.251/api/order/${orderId}`);
+          setOrderData(response.data);
+        } catch (error) {
+          toast.error('Error al obtener la orden');
+        }
+      };
+      fetchOrder();
+    }
+  }, [orderId]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setOrderData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleProductChange = (index, key, value) => {
-    const newProducts = [...products];
-    newProducts[index][key] = value;
-    setProducts(newProducts);
-  };
-
-  const addProductField = () => {
-    setProducts([...products, { coffee_id: '', quantity: '' }]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (orderId) {
+        await axios.put(`http://100.27.97.251/api/order/${orderId}`, orderData);
+        toast.success('Orden actualizada correctamente');
+      } else {
+        await axios.post('http://100.27.97.251/api/order', orderData);
+        toast.success('Orden creada correctamente');
+      }
+      onSave();
+    } catch (error) {
+      toast.error('Error al guardar la orden');
+    }
   };
 
   return (
     <div className="bg-white p-4 rounded shadow-md w-full max-w-sm">
-      <TextInput label="ID del Cliente" value={client_id} onChange={(e) => setClientId(e.target.value)} />
-      {products.map((product, index) => (
-        <div key={index}>
-          <TextInput label="ID del Café" value={product.coffee_id} onChange={(e) => handleProductChange(index, 'coffee_id', e.target.value)} />
-          <TextInput label="Cantidad" value={product.quantity} onChange={(e) => handleProductChange(index, 'quantity', e.target.value)} />
-        </div>
-      ))}
-      <Button text="Agregar Producto" onClick={addProductField} />
-      <Button text={initialValues ? "Actualizar Orden" : "Agregar Orden"} onClick={handleSubmit} />
+      <label className="block mb-2">
+        Fecha:
+        <input
+          type="date"
+          name="date_orders"
+          value={orderData.date_orders}
+          onChange={handleChange}
+          className="w-full mt-1 border-gray-300 rounded"
+          required
+        />
+      </label>
+      <label className="block mb-2">
+        Cliente:
+        <select
+          name="client_id_fk"
+          value={orderData.client_id_fk}
+          onChange={handleChange}
+          className="w-full mt-1 border-gray-300 rounded"
+          required
+        >
+          <option value="">Selecciona un cliente</option>
+          {clients.map((client) => (
+            <option key={client.client_id} value={client.client_id}>
+              {client.firstname} {client.lastname}
+            </option>
+          ))}
+        </select>
+      </label>
+      <Button text={orderId ? "Actualizar" : "Crear"} onClick={handleSubmit} />
     </div>
   );
 };
