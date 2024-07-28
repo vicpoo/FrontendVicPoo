@@ -1,28 +1,36 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/organisms/LoginForm';
-import NavbarExit from '../components/molecules/NavbarExit'; 
+import NavbarExit from '../components/molecules/NavbarExit';
+import toast from 'react-hot-toast';
 
 function Login() {
     const navigate = useNavigate();
 
-    const handleLogin = (data) => {
-        const { rol_id_fk } = data.user;
+    const handleLogin = async (data) => {
+        try {
+            const { rol_id_fk } = data.user;
 
-        if (rol_id_fk === 1) {
-            navigate('/Administrador');
-        } else if (rol_id_fk === 2) {
-            navigate('/vendedor');
-        } else if (rol_id_fk === 3) {
-            navigate('/Inventario');
-        } else {
-            alert('Rol desconocido');
+            if (rol_id_fk === 1) {
+                toast.success('Inicio de sesión exitoso como Administrador');
+                navigate('/Administrador');
+            } else if (rol_id_fk === 2) {
+                toast.success('Inicio de sesión exitoso como Vendedor');
+                navigate('/vendedor');
+            } else if (rol_id_fk === 3) {
+                toast.success('Inicio de sesión exitoso como Inventario');
+                navigate('/Inventario');
+            } else {
+                toast.error('Rol desconocido');
+            }
+        } catch (error) {
+            toast.error('Error al iniciar sesión: ' + error.message);
         }
     };
 
     return (
         <div className='bg-gray-300 min-h-screen flex flex-col'>
-            <NavbarExit /> 
+            <NavbarExit />
             <div className="flex items-start justify-center flex-grow bg-gray-300 py-12">
                 <div className="bg-white p-10 rounded-lg shadow-lg flex flex-col md:flex-row items-center">
                     <div className="w-full md:w-1/2">

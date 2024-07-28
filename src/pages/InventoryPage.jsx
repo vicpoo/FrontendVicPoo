@@ -4,6 +4,8 @@ import CoffeeForm from '../components/molecules/CoffeeForm';
 import InventoryTable from '../components/organisms/InventoryTable';
 import axios from 'axios';
 import { FaCoffee, FaSignOutAlt, FaWarehouse } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2'; // Importar SweetAlert2
 
 const InventoryPage = () => {
   const [inventory, setInventory] = useState([]);
@@ -21,13 +23,27 @@ const InventoryPage = () => {
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://100.27.97.251/api/coffee/${id}`);
-      alert('Café eliminado con éxito'); 
-      fetchInventory(); 
-    } catch (error) {
-      console.error('Error deleting coffee:', error);
-      alert('Error al eliminar el café');
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esta acción',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`http://100.27.97.251/api/coffee/${id}`);
+        toast.success('Café eliminado con éxito');
+        fetchInventory();
+        setCurrentAction('inventory');
+      } catch (error) {
+        console.error('Error deleting coffee:', error);
+        toast.error('Error al eliminar el café');
+      }
     }
   };
 
@@ -40,19 +56,25 @@ const InventoryPage = () => {
     if (incrementQuantity && !isNaN(incrementQuantity)) {
       try {
         await axios.put(`http://100.27.97.251/api/coffee/${id}/stock`, { increment_quantity: parseInt(incrementQuantity, 10) });
-        alert('Stock actualizado con éxito'); 
-        fetchInventory(); 
+        toast.success('Stock actualizado con éxito');
+        fetchInventory();
       } catch (error) {
         console.error('Error adding stock:', error);
-        alert('Error al actualizar el stock');
+        toast.error('Error al actualizar el stock');
       }
     } else {
-      alert('Por favor, ingrese un número válido.');
+      toast.error('Por favor, ingrese un número válido.');
     }
   };
 
   const handleLogout = () => {
     navigate('/login');
+  };
+
+  const handleSuccess = (message) => {
+    toast.success(message);
+    fetchInventory();
+    setCurrentAction('inventory');
   };
 
   useEffect(() => {
@@ -85,9 +107,9 @@ const InventoryPage = () => {
         </ul>
       </div>
       <div className="w-3/4 p-6">
-        {currentAction === 'add' && <CoffeeForm onSuccess={fetchInventory} />}
+        {currentAction === 'add' && <CoffeeForm onSuccess={() => handleSuccess('Café agregado con éxito')} />}
         {currentAction === 'inventory' && <InventoryTable inventory={inventory} onDelete={handleDelete} onEdit={handleEdit} onAddStock={handleAddStock} />}
-        {currentAction === 'edit' && currentCoffee && <CoffeeForm onSuccess={fetchInventory} coffee={currentCoffee} isEditing />}
+        {currentAction === 'edit' && currentCoffee && <CoffeeForm onSuccess={() => handleSuccess('Café actualizado con éxito')} coffee={currentCoffee} isEditing />}
       </div>
     </div>
   );

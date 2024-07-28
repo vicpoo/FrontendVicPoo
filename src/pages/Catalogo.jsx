@@ -37,11 +37,15 @@ const CatalogPage = () => {
       <NavbarExit />
       <div className="container mx-auto p-4">
         <ProductList 
-          products={products.map(({ coffee_id, name, price, image }) => ({
+          products={products.map(({ coffee_id, name, price, image, height,origin, qualification,inventory_quantity}) => ({
             id: coffee_id,
             title: name,
             price,
-            image
+            image,
+            height: height,
+            origin:origin,
+            qualification:qualification,
+            inventory_quantity:inventory_quantity
           }))} 
           onProductClick={handleProductClick} 
         />
@@ -57,11 +61,11 @@ const CatalogPage = () => {
                   className="mb-4 rounded w-full h-auto"
                 />
               )}
-              <p><strong>Price:</strong> {selectedProduct.price}</p>
-              <p><strong>Origin:</strong> {selectedProduct.origin || 'N/A'}</p>
-              <p><strong>Height:</strong> {selectedProduct.height || 'N/A'}</p>
-              <p><strong>Qualification:</strong> {selectedProduct.qualification || 'N/A'}</p>
-              <p><strong>Inventory Quantity:</strong> {selectedProduct.inventory_quantity || 'N/A'}</p>
+              <p><strong>Precio:</strong> ${selectedProduct.price}</p>
+              <p><strong>Origen:</strong> {selectedProduct.origin}</p>
+              <p><strong>Altura:</strong> {selectedProduct.height}</p>
+              <p><strong>Calificacion:</strong> {selectedProduct.qualification}</p>
+              <p><strong>Cantidad existente:</strong> {selectedProduct.inventory_quantity}</p>
               <button 
                 onClick={handleCloseDetails}
                 className="mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"

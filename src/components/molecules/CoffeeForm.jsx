@@ -36,12 +36,11 @@ const CoffeeForm = ({ coffee, onSuccess, onError, isEditing }) => {
     try {
       if (isEditing && coffee) {
         await axios.put(`http://100.27.97.251/api/coffee/${coffee.coffee_id}`, coffeeData);
-        alert('Café actualizado con éxito');
+        onSuccess('Café actualizado con éxito');
       } else {
         await axios.post('http://100.27.97.251/api/coffee', { ...coffeeData, created_at: new Date().toISOString(), created_by: 'system', deleted: 0 });
-        alert('Café agregado con éxito');
+        onSuccess('Café agregado con éxito');
       }
-      onSuccess();
     } catch (error) {
       console.error('Error submitting coffee:', error);
       onError && onError(error);
