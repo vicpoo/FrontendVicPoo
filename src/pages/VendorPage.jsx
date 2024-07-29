@@ -131,6 +131,11 @@ const VendorPage = () => {
     setCurrentAction('editOrder');
   };
 
+  const handleAddProductsToOrder = (order) => {
+    setCurrentOrder(order);
+    setCurrentAction('addProductsToOrder');
+  };
+
   const handleLogout = () => {
     navigate('/login');
   };
@@ -180,8 +185,9 @@ const VendorPage = () => {
         {currentAction === 'clients' && <ClientTable clients={clients} onDelete={handleDeleteClient} onEdit={handleEditClient} />}
         {currentAction === 'editClient' && currentClient && <ClientForm onSubmit={handleAddOrUpdateClient} initialValues={currentClient} />}
         {currentAction === 'addOrder' && <OrderForm onSubmit={handleAddOrUpdateOrder} />}
-        {currentAction === 'orders' && <OrderTable orders={orders} onDelete={handleDeleteOrder} onEdit={handleEditOrder} />}
+        {currentAction === 'orders' && <OrderTable orders={orders} onDelete={handleDeleteOrder} onEdit={handleEditOrder} onAddProducts={handleAddProductsToOrder} />}
         {currentAction === 'editOrder' && currentOrder && <OrderForm onSubmit={handleAddOrUpdateOrder} initialValues={currentOrder} />}
+        {currentAction === 'addProductsToOrder' && currentOrder && <AddProductsToOrder orderId={currentOrder.order_id} />}
       </div>
     </div>
   );
