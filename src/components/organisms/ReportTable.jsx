@@ -60,8 +60,8 @@ const ReportTable = () => {
         const leastFrequentClientIds = Object.keys(clientOrders).filter(id => clientOrders[id] === minOrders);
 
         // Obtener nombres de clientes más frecuentes y menos frecuentes
-        const mostFrequentClients = clients.filter(client => mostFrequentClientIds.includes(client.client_id));
-        const leastFrequentClients = clients.filter(client => leastFrequentClientIds.includes(client.client_id));
+        const mostFrequentClients = mostFrequentClientIds.map(id => clients.find(client => client.client_id === parseInt(id)));
+        const leastFrequentClients = leastFrequentClientIds.map(id => clients.find(client => client.client_id === parseInt(id)));
 
         setReportData({
           mostFrequentClients,
@@ -83,13 +83,13 @@ const ReportTable = () => {
     doc.text('Reporte de Ventas', 20, 20);
 
     doc.autoTable({
-      head: [['Cliente Más Frecuente', 'Cliente Menos Frecuente', 'Café Más Vendido', 'Café Menos Vendido']],
+      head: [['Cliente Más Frecuente (ID, Nombre)', 'Cliente Menos Frecuente (ID, Nombre)', 'Café Más Vendido', 'Café Menos Vendido']],
       body: [
         [
           reportData.mostFrequentClients.length > 0 ? 
-            reportData.mostFrequentClients.map(client => client.firstname).join(', ') : 'N/A',
+            reportData.mostFrequentClients.map(client => `${client.client_id}, ${client.firstname}`).join('; ') : 'N/A',
           reportData.leastFrequentClients.length > 0 ? 
-            reportData.leastFrequentClients.map(client => client.firstname).join(', ') : 'N/A',
+            reportData.leastFrequentClients.map(client => `${client.client_id}, ${client.firstname}`).join('; ') : 'N/A',
           reportData.mostSoldCoffees.length > 0 ? 
             reportData.mostSoldCoffees.map(coffee => coffee.name).join(', ') : 'N/A',
           reportData.leastSoldCoffees.length > 0 ? 
@@ -109,8 +109,8 @@ const ReportTable = () => {
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">Cliente Más Frecuente</th>
-            <th className="py-2 px-4 border-b">Cliente Menos Frecuente</th>
+            <th className="py-2 px-4 border-b">Cliente Más Frecuente (ID, Nombre)</th>
+            <th className="py-2 px-4 border-b">Cliente Menos Frecuente (ID, Nombre)</th>
             <th className="py-2 px-4 border-b">Café Más Vendido</th>
             <th className="py-2 px-4 border-b">Café Menos Vendido</th>
           </tr>
@@ -119,11 +119,11 @@ const ReportTable = () => {
           <tr>
             <td className="py-2 px-4 border-b">
               {reportData.mostFrequentClients.length > 0 ? 
-                reportData.mostFrequentClients.map(client => client.firstname).join(', ') : 'N/A'}
+                reportData.mostFrequentClients.map(client => `${client.client_id}, ${client.firstname}`).join('; ') : 'N/A'}
             </td>
             <td className="py-2 px-4 border-b">
               {reportData.leastFrequentClients.length > 0 ? 
-                reportData.leastFrequentClients.map(client => client.firstname).join(', ') : 'N/A'}
+                reportData.leastFrequentClients.map(client => `${client.client_id}, ${client.firstname}`).join('; ') : 'N/A'}
             </td>
             <td className="py-2 px-4 border-b">
               {reportData.mostSoldCoffees.length > 0 ? 
