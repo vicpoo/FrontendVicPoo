@@ -6,17 +6,21 @@ import ClientForm from '../components/molecules/ClientForm';
 import ClientTable from '../components/organisms/ClientTable';
 import UserForm from '../components/molecules/UserForm';
 import UserTable from '../components/organisms/UserTable';
+import OrderForm from '../components/molecules/OrderForm';
+import OrderTable from '../components/organisms/OrderTable';
 import axios from 'axios';
-import { FaBoxes, FaUsers, FaSignOutAlt } from 'react-icons/fa';
+import { FaBoxes, FaUsers, FaClipboardList, FaSignOutAlt } from 'react-icons/fa';
 
 const AdminPage = () => {
   const [currentAction, setCurrentAction] = useState('clients'); // Default view
   const [clients, setClients] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [users, setUsers] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [currentClient, setCurrentClient] = useState(null);
   const [currentInventory, setCurrentInventory] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentOrder, setCurrentOrder] = useState(null);
   const navigate = useNavigate();
 
   // Fetch clients
@@ -49,6 +53,17 @@ const AdminPage = () => {
     } catch (error) {
       console.error('Error fetching users:', error);
       alert('Error al obtener los usuarios');
+    }
+  };
+
+  // Fetch orders
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get('http://100.27.97.251/api/order');
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      alert('Error al obtener las órdenes');
     }
   };
 
@@ -88,6 +103,7 @@ const AdminPage = () => {
     setCurrentClient(client);
     setCurrentAction('edit-client');
   };
+
   // Handle add/update coffee
   const handleAddOrUpdateCoffee = async (coffeeData, isEditing) => {
     try {
@@ -167,6 +183,43 @@ const AdminPage = () => {
     setCurrentAction('edit-user');
   };
 
+  // Handle add/update order
+  const handleAddOrUpdateOrder = async (order) => {
+    try {
+      if (currentOrder) {
+        await axios.put(`http://100.27.97.251/api/order/${currentOrder.order_id}`, order);
+        alert('Orden actualizada con éxito');
+      } else {
+        await axios.post('http://100.27.97.251/api/order', order);
+        alert('Orden agregada con éxito');
+      }
+      fetchOrders();
+      setCurrentAction('orders');
+      setCurrentOrder(null);
+    } catch (error) {
+      console.error('Error adding/updating order:', error);
+      alert('Error al agregar/actualizar la orden');
+    }
+  };
+
+  // Handle delete order
+  const handleDeleteOrder = async (id) => {
+    try {
+      await axios.delete(`http://100.27.97.251/api/order/${id}`);
+      alert('Orden eliminada con éxito');
+      fetchOrders();
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      alert('Error al eliminar la orden');
+    }
+  };
+
+  // Handle edit order
+  const handleEditOrder = (order) => {
+    setCurrentOrder(order);
+    setCurrentAction('edit-order');
+  };
+
   // Handle logout
   const handleLogout = () => {
     navigate('/login');
@@ -177,6 +230,7 @@ const AdminPage = () => {
     fetchClients();
     fetchInventory();
     fetchUsers();
+    fetchOrders();
   }, []);
 
   return (
@@ -199,12 +253,12 @@ const AdminPage = () => {
           </li>
           <li>
             <button onClick={() => setCurrentAction('add-inventory')} className="text-white text-sm flex items-center my-3">
-              <FaBoxes className="text-white text-xl mr-2" /> <span>Agregar Café</span>
+              <FaBoxes className="text-white text-xl mr-2" /> <span>Agregar Inventario</span>
             </button>
           </li>
           <li>
             <button onClick={() => setCurrentAction('inventory')} className="text-white text-sm flex items-center my-3">
-              <FaBoxes className="text-white text-xl mr-2" /> <span>Ver Café</span>
+              <FaBoxes className="text-white text-xl mr-2" /> <span>Ver Inventario</span>
             </button>
           </li>
           <li>
@@ -218,22 +272,62 @@ const AdminPage = () => {
             </button>
           </li>
           <li>
+            <button onClick={() => setCurrentAction('add-order')} className="text-white text-sm flex items-center my-3">
+              <FaClipboardList className="text-white text-xl mr-2" /> <span>Agregar Orden</span>
+            </button>
+          </li>
+          <li>
+            <button onClick={() => setCurrentAction('orders')} className="text-white text-sm flex items-center my-3">
+              <FaClipboardList className="text-white text-xl mr-2" /> <span>Ver Órdenes</span>
+            </button>
+          </li>
+          <li>
             <button onClick={handleLogout} className="text-white text-sm flex items-center my-3">
-              <FaSignOutAlt className="text-white text-xl mr-2" /> <span>Salir</span>
+              <FaSignOutAlt className="text-white text-xl mr-2" /> <span>Cerrar Sesión</span>
             </button>
           </li>
         </ul>
       </div>
       <div className="w-3/4 p-6">
         {currentAction === 'add-client' && <ClientForm onSubmit={handleAddOrUpdateClient} />}
-        {currentAction === 'edit-client' && currentClient && <ClientForm onSubmit={handleAddOrUpdateClient} initialValues={currentClient} />}
-        {currentAction === 'clients' && <ClientTable clients={clients} onDelete={handleDeleteClient} onEdit={handleEditClient} />}
+        {currentAction === 'clients' && (
+          <ClientTable
+            clients={clients}
+            onDelete={handleDeleteClient}
+            onEdit={handleEditClient}
+          />
+        )}
+        {currentAction === 'edit-client' && <ClientForm client={currentClient} onSubmit={handleAddOrUpdateClient} />}
+        
         {currentAction === 'add-inventory' && <InventoryForm onSubmit={handleAddOrUpdateCoffee} />}
-        {currentAction === 'edit-inventory' && currentInventory && <InventoryForm onSubmit={handleAddOrUpdateCoffee} initialValues={currentInventory} />}
-        {currentAction === 'inventory' && <InventoryTable inventory={inventory} onDelete={handleDeleteInventory} onEdit={handleEditInventory} />}
+        {currentAction === 'inventory' && (
+          <InventoryTable
+            inventory={inventory}
+            onDelete={handleDeleteInventory}
+            onEdit={handleEditInventory}
+          />
+        )}
+        {currentAction === 'edit-inventory' && <InventoryForm inventory={currentInventory} onSubmit={handleAddOrUpdateCoffee} />}
+        
         {currentAction === 'add-user' && <UserForm onSubmit={handleAddOrUpdateUser} />}
-        {currentAction === 'edit-user' && currentUser && <UserForm onSubmit={handleAddOrUpdateUser} initialValues={currentUser} />}
-        {currentAction === 'users' && <UserTable users={users} onDelete={handleDeleteUser} onEdit={handleEditUser} />}
+        {currentAction === 'users' && (
+          <UserTable
+            users={users}
+            onDelete={handleDeleteUser}
+            onEdit={handleEditUser}
+          />
+        )}
+        {currentAction === 'edit-user' && <UserForm user={currentUser} onSubmit={handleAddOrUpdateUser} />}
+        
+        {currentAction === 'add-order' && <OrderForm onSubmit={handleAddOrUpdateOrder} />}
+        {currentAction === 'orders' && (
+          <OrderTable
+            orders={orders}
+            onDelete={handleDeleteOrder}
+            onEdit={handleEditOrder}
+          />
+        )}
+        {currentAction === 'edit-order' && <OrderForm order={currentOrder} onSubmit={handleAddOrUpdateOrder} />}
       </div>
     </div>
   );
