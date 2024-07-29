@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaTrashAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
-const OrderTable = ({ onEdit }) => {
+const OrderTable = () => {
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);
+  const [orderCoffees, setOrderCoffees] = useState([]);
+  const [coffees, setCoffees] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -27,13 +29,38 @@ const OrderTable = ({ onEdit }) => {
       }
     };
 
+    const fetchOrderCoffees = async () => {
+      try {
+        const response = await axios.get('http://100.27.97.251/api/order_coffee');
+        setOrderCoffees(response.data);
+      } catch (error) {
+        toast.error('Error al cargar los productos de las órdenes');
+      }
+    };
+
+    const fetchCoffees = async () => {
+      try {
+        const response = await axios.get('http://100.27.97.251/api/coffee');
+        setCoffees(response.data);
+      } catch (error) {
+        toast.error('Error al cargar los cafés');
+      }
+    };
+
     fetchOrders();
     fetchClients();
+    fetchOrderCoffees();
+    fetchCoffees();
   }, []);
 
   const getClientName = (clientId) => {
     const client = clients.find(client => client.client_id === clientId);
     return client ? `${client.firstname} ${client.lastname}` : 'Cliente desconocido';
+  };
+
+  const getCoffeeName = (coffeeId) => {
+    const coffee = coffees.find(coffee => coffee.coffee_id === coffeeId);
+    return coffee ? coffee.name : 'Café desconocido';
   };
 
   const handleDelete = async (orderId) => {
@@ -59,13 +86,19 @@ const OrderTable = ({ onEdit }) => {
     }
   };
 
-  const formatOrderItems = (items) => {
-    return items.map((item, index) => (
-      <div key={index} className="flex items-center">
-        <span className="mr-2">{item.coffee_name}</span>
-        <span className="text-gray-600">x{item.quantity}</span>
-      </div>
-    ));
+  const formatOrderItems = (orderId) => {
+    const items = orderCoffees.filter(item => item.order_id === orderId);
+    return items.length > 0 ? (
+      items.map((item, index) => (
+        <div key={index} className="flex items-center">
+          <span className="mr-2">{getCoffeeName(item.coffee_id)} (ID: {item.coffee_id})</span>
+          <span className="text-gray-600 mr-2">x{item.quantity}</span>
+          <span className="text-gray-600 mr-2">${item.price}</span>
+        </div>
+      ))
+    ) : (
+      <span>No hay productos</span>
+    );
   };
 
   return (
@@ -74,9 +107,9 @@ const OrderTable = ({ onEdit }) => {
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr>
-            <th className="py-2 border-b">ID</th>
+            <th className="py-2 border-b">ID Orden</th>
+            <th className="py-2 border-b">Nombre del Cliente</th>
             <th className="py-2 border-b">Fecha</th>
-            <th className="py-2 border-b">Cliente</th>
             <th className="py-2 border-b">Productos</th>
             <th className="py-2 border-b">Acciones</th>
           </tr>
@@ -85,15 +118,12 @@ const OrderTable = ({ onEdit }) => {
           {orders.map((order) => (
             <tr key={order.order_id}>
               <td className="border px-4 py-2">{order.order_id}</td>
-              <td className="border px-4 py-2">{order.date_orders}</td>
               <td className="border px-4 py-2">{getClientName(order.client_id_fk)}</td>
+              <td className="border px-4 py-2">{order.date_orders}</td>
               <td className="border px-4 py-2">
-                {order.items ? formatOrderItems(order.items) : 'No hay productos'}
+                {formatOrderItems(order.order_id)}
               </td>
               <td className="border px-4 py-2 flex items-center space-x-2">
-                <button onClick={() => onEdit(order)} className="text-yellow-500 hover:text-yellow-700">
-                  <FaEdit />
-                </button>
                 <button onClick={() => handleDelete(order.order_id)} className="text-red-500 hover:text-red-700">
                   <FaTrashAlt />
                 </button>
