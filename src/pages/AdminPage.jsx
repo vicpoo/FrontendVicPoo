@@ -8,8 +8,11 @@ import UserForm from '../components/molecules/UserForm';
 import UserTable from '../components/organisms/UserTable';
 import OrderForm from '../components/molecules/OrderForm';
 import OrderTable from '../components/organisms/OrderTable';
+import ReportTable from '../components/organisms/ReportTable';
 import axios from 'axios';
 import { FaBoxes, FaUsers, FaClipboardList, FaSignOutAlt } from 'react-icons/fa';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const AdminPage = () => {
   const [currentAction, setCurrentAction] = useState('clients'); // Default view
@@ -17,6 +20,7 @@ const AdminPage = () => {
   const [inventory, setInventory] = useState([]);
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [reportData, setReportData] = useState([]);
   const [currentClient, setCurrentClient] = useState(null);
   const [currentInventory, setCurrentInventory] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -233,13 +237,62 @@ const AdminPage = () => {
     fetchOrders();
   }, []);
 
+  // Generate report
+  const generateReport = async () => {
+    try {
+      const clientResponse = await axios.get('http://100.27.97.251/api/client');
+      const clients = clientResponse.data;
+
+      const coffeeResponse = await axios.get('http://100.27.97.251/api/coffee');
+      const coffees = coffeeResponse.data;
+
+      const orderResponse = await axios.get('http://100.27.97.251/api/order');
+      const orders = orderResponse.data;
+
+      const coffeeSales = {};
+      const clientOrders = {};
+
+      orders.forEach(order => {
+        if (!clientOrders[order.client_id]) {
+          clientOrders[order.client_id] = 0;
+        }
+        clientOrders[order.client_id] += 1;
+
+        order.coffees.forEach(coffee => {
+          if (!coffeeSales[coffee.coffee_id]) {
+            coffeeSales[coffee.coffee_id] = 0;
+          }
+          coffeeSales[coffee.coffee_id] += coffee.quantity;
+        });
+      });
+
+      const mostSoldCoffee = coffees.reduce((max, coffee) => coffeeSales[coffee.coffee_id] > coffeeSales[max.coffee_id] ? coffee : max, coffees[0]);
+      const leastSoldCoffee = coffees.reduce((min, coffee) => coffeeSales[coffee.coffee_id] < coffeeSales[min.coffee_id] ? coffee : min, coffees[0]);
+      const mostFrequentClient = clients.reduce((max, client) => clientOrders[client.client_id] > clientOrders[max.client_id] ? client : max, clients[0]);
+      const leastFrequentClient = clients.reduce((min, client) => clientOrders[client.client_id] < clientOrders[min.client_id] ? client : min, clients[0]);
+
+      const doc = new jsPDF();
+      doc.text('Reporte de Ventas', 20, 20);
+      doc.autoTable({
+        head: [['Cliente Más Frecuente', 'Cliente Menos Frecuente', 'Café Más Vendido', 'Café Menos Vendido']],
+        body: [[
+          mostFrequentClient.firstname,
+          leastFrequentClient.firstname,
+          mostSoldCoffee.name,
+          leastSoldCoffee.name
+        ]]
+      });
+      doc.save('reporte_ventas.pdf');
+      alert('Reporte generado con éxito');
+    } catch (error) {
+      console.error('Error generating report:', error);
+      alert('Error al generar el reporte');
+    }
+  };
+
   return (
     <div className="flex">
-      <div className="w-1/4 bg-gray-800 p-4 min-h-screen">
-        <div className="flex items-center mb-6">
-          <FaBoxes className="text-blue-500 text-2xl mr-3" />
-          <h2 className="text-white text-lg font-bold">Administración</h2>
-        </div>
+      <div className="w-1/4 bg-gray-800 min-h-screen p-6">
         <ul>
           <li>
             <button onClick={() => setCurrentAction('add-client')} className="text-white text-sm flex items-center my-3">
@@ -282,53 +335,35 @@ const AdminPage = () => {
             </button>
           </li>
           <li>
+  <button onClick={() => setCurrentAction('report')} className="text-white text-sm flex items-center my-3">
+    <FaClipboardList className="text-white text-xl mr-2" /> <span>Ver Reporte</span>
+  </button>
+</li>
+
+          <li>
             <button onClick={handleLogout} className="text-white text-sm flex items-center my-3">
-              <FaSignOutAlt className="text-white text-xl mr-2" /> <span>Cerrar Sesión</span>
+              <FaSignOutAlt className="text-white text-xl mr-2" /> <span>Salir</span>
             </button>
           </li>
         </ul>
       </div>
+
       <div className="w-3/4 p-6">
-        {currentAction === 'add-client' && <ClientForm onSubmit={handleAddOrUpdateClient} />}
-        {currentAction === 'clients' && (
-          <ClientTable
-            clients={clients}
-            onDelete={handleDeleteClient}
-            onEdit={handleEditClient}
-          />
-        )}
-        {currentAction === 'edit-client' && <ClientForm client={currentClient} onSubmit={handleAddOrUpdateClient} />}
-        
-        {currentAction === 'add-inventory' && <InventoryForm onSubmit={handleAddOrUpdateCoffee} />}
-        {currentAction === 'inventory' && (
-          <InventoryTable
-            inventory={inventory}
-            onDelete={handleDeleteInventory}
-            onEdit={handleEditInventory}
-          />
-        )}
-        {currentAction === 'edit-inventory' && <InventoryForm inventory={currentInventory} onSubmit={handleAddOrUpdateCoffee} />}
-        
-        {currentAction === 'add-user' && <UserForm onSubmit={handleAddOrUpdateUser} />}
-        {currentAction === 'users' && (
-          <UserTable
-            users={users}
-            onDelete={handleDeleteUser}
-            onEdit={handleEditUser}
-          />
-        )}
-        {currentAction === 'edit-user' && <UserForm user={currentUser} onSubmit={handleAddOrUpdateUser} />}
-        
-        {currentAction === 'add-order' && <OrderForm onSubmit={handleAddOrUpdateOrder} />}
-        {currentAction === 'orders' && (
-          <OrderTable
-            orders={orders}
-            onDelete={handleDeleteOrder}
-            onEdit={handleEditOrder}
-          />
-        )}
-        {currentAction === 'edit-order' && <OrderForm order={currentOrder} onSubmit={handleAddOrUpdateOrder} />}
-      </div>
+  {currentAction === 'clients' && <ClientTable clients={clients} onDelete={handleDeleteClient} onEdit={handleEditClient} />}
+  {currentAction === 'add-client' && <ClientForm onSubmit={handleAddOrUpdateClient} />}
+  {currentAction === 'edit-client' && <ClientForm onSubmit={handleAddOrUpdateClient} initialData={currentClient} />}
+  {currentAction === 'inventory' && <InventoryTable inventory={inventory} onDelete={handleDeleteInventory} onEdit={handleEditInventory} />}
+  {currentAction === 'add-inventory' && <InventoryForm onSubmit={handleAddOrUpdateCoffee} />}
+  {currentAction === 'edit-inventory' && <InventoryForm onSubmit={handleAddOrUpdateCoffee} initialData={currentInventory} />}
+  {currentAction === 'users' && <UserTable users={users} onDelete={handleDeleteUser} onEdit={handleEditUser} />}
+  {currentAction === 'add-user' && <UserForm onSubmit={handleAddOrUpdateUser} />}
+  {currentAction === 'edit-user' && <UserForm onSubmit={handleAddOrUpdateUser} initialData={currentUser} />}
+  {currentAction === 'orders' && <OrderTable orders={orders} onDelete={handleDeleteOrder} onEdit={handleEditOrder} />}
+  {currentAction === 'add-order' && <OrderForm onSubmit={handleAddOrUpdateOrder} />}
+  {currentAction === 'edit-order' && <OrderForm onSubmit={handleAddOrUpdateOrder} initialData={currentOrder} />}
+  {currentAction === 'report' && <ReportTable />}
+</div>
+    
     </div>
   );
 };

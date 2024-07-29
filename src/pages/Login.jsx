@@ -29,9 +29,9 @@ function Login() {
     };
 
     return (
-        <div className='bg-gray-300 min-h-screen flex flex-col'>
+        <div className='bg-pink-300 min-h-screen flex flex-col'>
             <NavbarExit />
-            <div className="flex items-start justify-center flex-grow bg-gray-300 py-12">
+            <div className="flex items-start justify-center flex-grow bg-pink-300 py-12">
                 <div className="bg-white p-10 rounded-lg shadow-lg flex flex-col md:flex-row items-center">
                     <div className="w-full md:w-1/2">
                         <h1 className="text-2xl text-gray-800 mb-4 text-center">Inicio de Sesión</h1>
