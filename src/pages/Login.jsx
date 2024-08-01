@@ -38,7 +38,7 @@ function Login() {
                         <LoginForm onSubmit={handleLogin} />
                     </div>
                     <div className="w-full md:w-1/2 mt-6 md:mt-0 md:ml-6">
-                        <img src="/public/Imagenes/collage login.jpg" alt="Imagen de inicio de sesión" className="w-48 h-auto object-cover" />
+                        <img src="./Imagenes/collage login.jpg" alt="Imagen de inicio de sesión" className="w-48 h-auto object-cover" />
                     </div>
                 </div>
             </div>

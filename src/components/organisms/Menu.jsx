@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const Menu = () => {
   return (
     <div className="bg-gray-100">
-      <div className="relative bg-cover bg-center h-screen" style={{ backgroundImage: 'url(public/Imagenes/heroicSection.jpg)' }}>
+      <div className="relative bg-cover bg-center h-screen" style={{ backgroundImage: 'url(./Imagenes/heroicSection.jpg)' }}>
         <Navbar />
         <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50">
           <Text className="text-4xl font-bold text-white mb-8">
@@ -32,7 +32,7 @@ const Menu = () => {
               Microempresa creada hace 7 años, en el municipio de Motozintla, Chiapas; nacida de la necesidad de apoyar a productores de café de la dependencia Sagarpa conocido como FAPPA (fondo para el apoyo a proyectos productivos en núcleos agrarios); para elaborar café con productos artesanales y naturales que tiene un manejo agroecológico que promueve la protección del medio ambiente y ofrece un mercado sano sin uso de agroquímicos, LO QUE NOS CONVIERTE EN UN PRODUCTO COMPLETAMENTE ORGÁNICO.
             </Text>
           </div>
-          <img src="public/Imagenes/sobreNosotros.jpg" alt="Sobre Nosotros" className="w-50 h-60 rounded-full object-cover shadow-lg" />
+          <img src="./Imagenes/sobreNosotros.jpg" alt="Sobre Nosotros" className="w-50 h-60 rounded-full object-cover shadow-lg" />
         </div>
       </ContentSection>
 
@@ -42,7 +42,7 @@ const Menu = () => {
         </Text>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
           <div className="flex flex-col items-center">
-            <Image src="public/Imagenes/recoleccionCAfe.jpg" alt="cosecha de Café" className="w-49 h-50 rounded-full object-cover shadow-lg" />
+            <Image src="./Imagenes/recoleccionCAfe.jpg" alt="cosecha de Café" className="w-49 h-50 rounded-full object-cover shadow-lg" />
             <h3 className="text-xl font-semibold text-gray-700 mt-4">Cosecha de Café</h3>
             <Text className="text-center text-lg text-gray-800 mt-2">
               Nos encargamos que nuestras cosechas sean las mejores para mejor experiencia y degustación al cliente.
@@ -50,7 +50,7 @@ const Menu = () => {
           </div>
 
           <div className="flex flex-col items-center">
-            <Image src="public/Imagenes/Tostado.jpg" alt="Secado de los granos del café" className="w-49 h-50 rounded-full object-cover shadow-lg" />
+            <Image src="./Imagenes/Tostado.jpg" alt="Secado de los granos del café" className="w-49 h-50 rounded-full object-cover shadow-lg" />
             <h3 className="text-xl font-semibold text-gray-700 mt-4">Secado de los granos del café</h3>
             <Text className="text-center text-lg text-gray-800 mt-2">
               Nuestra especialidad sobre el uso a las camas africanas dentro de los secadores ecológicos; extendemos con una palita de madera para no contaminar los granos con la grasa de las manos.
@@ -58,7 +58,7 @@ const Menu = () => {
           </div>
 
           <div className="flex flex-col items-center">
-            <Image src="public/Imagenes/FertilizanteC.jpg" alt="Fertilizantes y más" className="w-49 h-50 rounded-full object-cover shadow-lg" />
+            <Image src="./Imagenes/FertilizanteC.jpg" alt="Fertilizantes y más" className="w-49 h-50 rounded-full object-cover shadow-lg" />
             <h3 className="text-xl font-semibold text-gray-700 mt-4">Fertilizantes y más...</h3>
             <Text className="text-center text-lg text-gray-800 mt-2">
               Café de especialidad que ya venden los productores y los envases de refresco contienen lixiviados (abonos orgánicos líquidos) que usan los productores para no aplicar productos químicos y producir de manera agroecológica.
@@ -66,7 +66,7 @@ const Menu = () => {
           </div>
 
           <div className="flex flex-col items-center">
-            <Image src="public/Imagenes/cafe00111.jpg" alt="Exhibición de Café" className="w-49 h-50 rounded-full object-cover shadow-lg" />
+            <Image src="./Imagenes/cafe00111.jpg" alt="Exhibición de Café" className="w-49 h-50 rounded-full object-cover shadow-lg" />
             <h3 className="text-xl font-semibold text-gray-700 mt-4">Exhibición de Café</h3>
             <Text className="text-center text-lg text-gray-800 mt-2">
               Nuestros productos se exhibieron y vendieron en Oaxaca del 11 al 13 de junio del presente año en la feria internacional de agroecología.
@@ -75,7 +75,7 @@ const Menu = () => {
         </div>
       </ContentSection>
 
-      <div className="relative bg-cover bg-center h-screen" style={{ backgroundImage: 'url(public/Imagenes/presentation.jpg)' }}>
+      <div className="relative bg-cover bg-center h-screen" style={{ backgroundImage: 'url(./Imagenes/presentation.jpg)' }}>
         <div className="absolute inset-0 flex flex-row">
           <div className="w-1/2 "></div> {/* Parte sin opacidad */}
           <div className="w-1/2 bg-black bg-opacity-50 flex flex-col justify-center items-center">
